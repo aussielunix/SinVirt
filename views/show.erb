@@ -1,0 +1,15 @@
+<h1>SinVirt - Sinatra Libvirt</h1>
+<table id="customers">
+  <tr>
+    <th>Name</th><th>State</th>
+  </tr>
+  <% @domains.each do |domain| %>
+    <tr>
+      <td><%= domain.name %></td><td><%= domain.state %>
+    </tr>
+<% end %>
+</table>
+
+
+
+
