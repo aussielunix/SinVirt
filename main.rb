@@ -6,7 +6,6 @@ require 'rubygems'
 require 'sinatra'
 require 'libvirt'
 require 'domains'
-require 'xmlsimple'
 
 before do
           @vconn = SinVirt::LibVirt.new("foundation")
@@ -19,6 +18,16 @@ get '/' do
   uuids.each do |uuid|
     name = @vconn.uuid2name(uuid)
     state = @vconn.uuid2state(uuid)
+    case state.to_s
+      when "1"
+        state = "running"
+      when "4"
+        state = "shutting down"
+      when "5"
+        state = "stopped"
+      else
+        state = "unknown"
+      end
     @domains << Domain.new(uuid, name, state)
   end
   erb :show
