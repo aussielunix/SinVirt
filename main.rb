@@ -12,7 +12,6 @@ before do
 end
 
 get '/' do
-  Domain = Struct.new(:uuid, :name, :state)
   @domains = []
   uuids = @vconn.list_all_domains
   uuids.each do |uuid|

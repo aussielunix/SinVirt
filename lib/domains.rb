@@ -1,3 +1,5 @@
+Domain = Struct.new(:uuid, :name, :state)
+
 module SinVirt
   class LibVirt
     def initialize(node)
