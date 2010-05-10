@@ -23,7 +23,8 @@ Eventually I hope to grow this into a simple app that can be used as a self serv
 # TODO
 
 * learn more ruby
-* add third column to table with domain controls, stop, start etc.
+* application auth via rack middleware
+* action logging 
 * VM provisioning from kickstart
 * ability to manage multiple nodes
 * caching layer to stop smashing libvirt
