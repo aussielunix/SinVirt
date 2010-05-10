@@ -50,6 +50,21 @@ module SinVirt
         dom.uuid()
     end
 
+    def stopdomain(uuid)
+        dom = @conn.lookup_domain_by_uuid(uuid)
+        dom.shutdown
+    end
+    
+    def destroydomain(uuid)
+        dom = @conn.lookup_domain_by_uuid(uuid)
+        dom.destroy
+    end
+
+    def startdomain(uuid)
+        dom = @conn.lookup_domain_by_uuid(uuid)
+        dom.create
+    end
+    
   end #endclass
 end # endmodule
 

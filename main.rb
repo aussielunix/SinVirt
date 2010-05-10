@@ -32,4 +32,22 @@ get '/' do
   erb :show
 end
 
+get '/:action/:vm' do
+  case params[:action]
+    when "start"
+      uuid = @vconn.name2uuid(params[:vm])
+      @vconn.startdomain(uuid)
+    when "shutdown"
+      uuid = @vconn.name2uuid(params[:vm])
+      @vconn.stopdomain(uuid)
+    when "destroy"
+      uuid = @vconn.name2uuid(params[:vm])
+      @vconn.destroydomain(uuid)
+    else
+      redirect '/', 500
+    end
+    redirect '/'
+end
+
+
 

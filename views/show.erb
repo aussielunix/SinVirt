@@ -1,11 +1,11 @@
 <h1>SinVirt - Sinatra Libvirt</h1>
 <table id="customers">
   <tr>
-    <th>Name</th><th>State</th>
+    <th>Name</th><th>State</th><th>Action</th>
   </tr>
   <% @domains.each do |domain| %>
     <tr>
-      <td><%= domain.name %></td><td><%= domain.state %></td>
+      <td><%= domain.name %></td><td><%= domain.state %></td><td><a href="/start/<%= domain.name %>">Boot </a> | <a href="/shutdown/<%= domain.name %>" onclick="confirm('Are you sure');">Shutdown</a> (VM requires ACPId running) | <a href="/destroy/<%= domain.name %>" onclick="confirm('Are you sure');">Power Off</a> (unsafe)</td>
     </tr>
 <% end %>
 </table>
