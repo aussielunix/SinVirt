@@ -49,5 +49,11 @@ get '/:action/:vm' do
     redirect '/'
 end
 
+get '/about' do
+  erb :about
+end
 
+get '/console' do
+  erb :console
+end
 

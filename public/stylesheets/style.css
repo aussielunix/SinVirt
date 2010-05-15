@@ -2,45 +2,82 @@ body
 {
 /*  font-size:75%; */
   font-family:verdana,arial,'sans serif';
-  background-color:#FFFFF0;
-  color:#000000;
+  background-color:#ABAD85;
   margin:10px;
 }
 
 h1 {font-size:200%;}
 h2 {font-size:140%;}
 h3 {font-size:110%;}
-
-ul {list-style:circle;}
-ol {list-style:upper-roman;}
-
 a:link {color:#000080;}
 a:hover {color:red;}
 
 
-#customers
-{
-  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-  width:100%;
-  border-collapse:collapse;
-}
-#customers td, #customers th 
-{
-  font-size:1em;
-  border:1px solid #98bf21;
-  padding:3px 7px 2px 7px;
-}
-#customers th 
+	pre {text-indent: 30px}
+ 
+	#tabmenu {
+		color: #000;
+		border-bottom: 2px solid black;
+		margin: 12px 0px 0px 0px;
+		padding: 0px;
+		z-index: 1;
+		padding-left: 10px }
+ 
+	#tabmenu li {
+		display: inline;
+		overflow: hidden;
+		list-style-type: none; }
+ 
+	#tabmenu a, a.active {
+		color: #DEDECF;
+		background: #898B5E;
+		font: bold 1em "Trebuchet MS", Arial, sans-serif;
+		border: 2px solid black;
+		padding: 2px 5px 0px 5px;
+		margin: 0;
+		text-decoration: none; }
+ 
+	#tabmenu a.active {
+		background: #ABAD85;
+		border-bottom: 3px solid #ABAD85; }
+ 
+	#tabmenu a:hover {
+		color: #fff;
+		background: #ADC09F; }
+ 
+	#tabmenu a:visited {
+		color: #E8E9BE; }
+ 
+	#tabmenu a.active:hover {
+		background: #ABAD85;
+		color: #DEDECF; }
+ 
+	#content {font: 0.9em/1.3em "bitstream vera sans", verdana, sans-serif;
+		text-align: justify;
+		background: #ABAD85;
+		padding: 20px;
+		border: 2px solid black;
+		border-top: none;
+		z-index: 2;	}
+ 
+	#content a {
+		text-decoration: none;
+		color: #E8E9BE; }
+ 
+	#content a:hover { background: #898B5E; }
+
+	#customers th 
 {
   font-size:1.1em;
   text-align:left;
   padding-top:5px;
   padding-bottom:4px;
-  background-color:#A7C942;
-  color:#ffffff;
+  background-color:#DEDECF;
 }
-#customers tr.alt td 
+
+#customers td, #customers th 
 {
-  color:#000000;
-  background-color:#EAF2D3;
+  font-size:1em;
+  border:1px solid #000000;
+  padding:3px 7px 2px 7px;
 }
