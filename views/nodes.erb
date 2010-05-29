@@ -1,0 +1,30 @@
+<h1>node's</h1>
+<table id="customers">
+  <tr>
+    <th>UUID</th>
+    <th>HostName</th>
+    <th>State</th>
+    <th>Action</th>    
+  </tr>
+  <% if @nodes %>
+  <% for node in @nodes %>
+    <tr>
+      <td><%= node.uuid %></td><td><%= node.hostname %></td><td><%= node.state %></td><td><a href="/nodes/delete/<%= node.id %>">Delete</a></td>    
+    </tr>
+  <% end 
+  else %>.
+<% end %>
+<tr>
+<form action="/nodes/new" method="post" id="node">
+<th><input type="text" name="node[uuid]" id="uuid" /></th>
+<th><input type="text" name="node[hostname]" id="hostname" /></th>
+<th>
+  <select name="node[state]" id="state">
+    <option value="1">Enabled</option>
+    <option value="0">Disabled</option>
+  </select>
+</th>
+<th><input type="submit" value="Add" /></th>
+</form>
+</tr>
+</table>

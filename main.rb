@@ -4,56 +4,103 @@ $LOAD_PATH << File.join(Dir.getwd, 'lib')
 
 require 'rubygems'
 require 'sinatra'
+require 'dm-core'
 require 'libvirt'
-require 'domains'
+require 'sinvirt'
 
-before do
-          @vconn = SinVirt::LibVirt.new("foundation")
+configure :development do
+    DataMapper::Logger.new($stdout, :debug)
+    # datamapper magick for auto migrations.
+    DataMapper.auto_upgrade!
 end
 
 get '/' do
-  @domains = []
-  uuids = @vconn.list_all_domains
-  uuids.each do |uuid|
-    name = @vconn.uuid2name(uuid)
-    state = @vconn.uuid2state(uuid)
-    case state.to_s
-      when "1"
-        state = "running"
-      when "4"
-        state = "shutting down"
-      when "5"
-        state = "stopped"
-      else
-        state = "unknown"
-      end
-    @domains << Domain.new(uuid, name, state)
-  end
-  erb :show
+    erb "Welcome"
 end
 
-get '/:action/:vm' do
-  case params[:action]
-    when "start"
-      uuid = @vconn.name2uuid(params[:vm])
-      @vconn.startdomain(uuid)
-    when "shutdown"
-      uuid = @vconn.name2uuid(params[:vm])
-      @vconn.stopdomain(uuid)
-    when "destroy"
-      uuid = @vconn.name2uuid(params[:vm])
-      @vconn.destroydomain(uuid)
-    else
-      redirect '/', 500
+#Nodes management
+get '/nodes/list' do
+    @nodes = SinVirt::DB::Node.all()
+    erb :nodes
+end
+
+post '/nodes/new' do
+    node = SinVirt::DB::Node.new(params[:node]).save
+    redirect '/nodes/list'
+end
+
+get '/nodes/delete/:id' do
+    node = SinVirt::DB::Node.get(params[:id])
+    unless node.nil?
+     node.destroy
     end
-    redirect '/'
+    redirect '/nodes/list'
+end
+
+#VMs management
+get '/domains/list' do
+    @nodes = SinVirt::DB::Node.all()
+    @domains = SinVirt::DB::Domain.all()
+    erb :domains
+end
+
+post '/domains/new' do
+    domain = SinVirt::DB::Domain.new(params[:domain]).save
+    redirect '/domains/list'
 end
 
 get '/about' do
-  erb :about
+    erb :about
 end
 
 get '/console' do
-  erb :console
+    erb :console
 end
+
+get '/:action/:uuid/:node' do
+  case params[:action]
+    when "start"
+        vconn = SinVirt::LibVirt.new(params[:node])
+        vconn.startdomain((params[:uuid]))
+        `curl -s http://127.0.0.1:4568/update`
+    when "shutdown"
+        vconn = SinVirt::LibVirt.new(params[:node])
+        vconn.stopdomain((params[:uuid]))
+        `curl -s http://127.0.0.1:4568/update`
+    when "destroy"
+        vconn = SinVirt::LibVirt.new(params[:node])
+        vconn.destroydomain(params[:uuid])
+        `curl -s env["HTTP_HOST"]/update`
+    else
+      redirect '/', 500
+    end
+    redirect '/domains/list'
+end
+
+# Should be called by cron to update the db
+get '/update' do
+    nodes = SinVirt::DB::Node.all()
+    nodes.each do |node|
+    p node.inspect
+        # retrieve list of domains on node
+        @vconn = SinVirt::LibVirt.new(node.hostname)
+#        #p node.hostname
+        uuids = @vconn.list_all_domains
+        uuids.each do |uuid|
+            # TODO: need wrapper to check if dn entry already exists and update not save
+            if domain = SinVirt::DB::Domain.first(:uuid => uuid)
+               #update existing records
+               domain.update(:state => @vconn.uuid2state(uuid))
+            else
+                domain = SinVirt::DB::Domain.new()
+                domain.uuid = uuid
+                domain.name = @vconn.uuid2name(uuid)
+                domain.state = @vconn.uuid2state(uuid)
+                domain.node_id = node.id
+                domain.save
+            end
+        end #uuids.each
+    end #nodes.each 
+    redirect '/domains/list'
+end #route
 

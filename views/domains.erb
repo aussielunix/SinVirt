@@ -1,0 +1,27 @@
+<h1>Domains</h1>
+<table id="customers">
+  <tr>
+    <th>UUID</th>
+    <th>Name</th>
+    <th>State</th>
+    <th>Node</th>
+    <th>Actions</th>
+  </tr>
+  <% if @domains %>
+  <% for domain in @domains %>
+    <tr>
+      <td><%= domain.uuid %></td>
+      <td><%= domain.name %></td>
+      <td><%= domain.state %></td>
+      <td><%= domain.node.hostname %></td>
+      <td><a href="/start/<%= domain.uuid %>/<%= domain.node.hostname %>" if (! confirm('Continue?')) return false;" >Boot </a> | <a href="/shutdown/<%= domain.uuid %>/<%= domain.node.hostname %>" if (! confirm('Continue?')) return false;">Shutdown </a> | <a href="/destroy/<%= domain.uuid %>/<%= domain.node.hostname %>" onclick = "if (! confirm('Continue?')) return false;">Destroy </a></td>
+    </tr>
+  <% end 
+  else %>.
+<% end %>
+</tr>
+</table>
+<br />
+<a href="http://<%= env["HTTP_HOST"] %>/update">Sync DB </a>
+
+
