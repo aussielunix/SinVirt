@@ -3,6 +3,6 @@ syntax:glob
 sinvirt.db
 
 syntax:regexp
-^vendor/gems/
+^vendor
 ^bin/
 ^\.bundle/config
