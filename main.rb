@@ -1,8 +1,10 @@
-#!/opt/ruby-enterprise/bin/ruby -w
+#!/usr/bin/env ruby
 
 $LOAD_PATH << File.join(Dir.getwd, 'lib')
 
 require 'rubygems'
+require "bundler"
+Bundler.setup
 require 'sinatra'
 require 'dm-core'
 require 'libvirt'
@@ -77,17 +79,15 @@ get '/:action/:uuid/:node' do
     redirect '/domains/list'
 end
 
-# Should be called by cron to update the db
+#
+# Should be called by cron to sync the db with libvirt
 get '/update' do
     nodes = SinVirt::DB::Node.all()
     nodes.each do |node|
-    p node.inspect
         # retrieve list of domains on node
         @vconn = SinVirt::LibVirt.new(node.hostname)
-#        #p node.hostname
         uuids = @vconn.list_all_domains
         uuids.each do |uuid|
-            # TODO: need wrapper to check if dn entry already exists and update not save
             if domain = SinVirt::DB::Domain.first(:uuid => uuid)
                #update existing records
                domain.update(:state => @vconn.uuid2state(uuid))

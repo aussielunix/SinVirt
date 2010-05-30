@@ -1,1 +1,8 @@
+syntax:glob
+*.swp
 sinvirt.db
+
+syntax:regexp
+^vendor/gems/
+^bin/
+^\.bundle/config

@@ -14,7 +14,7 @@
       <td><%= domain.name %></td>
       <td><%= domain.state %></td>
       <td><%= domain.node.hostname %></td>
-      <td><a href="/start/<%= domain.uuid %>/<%= domain.node.hostname %>" if (! confirm('Continue?')) return false;" >Boot </a> | <a href="/shutdown/<%= domain.uuid %>/<%= domain.node.hostname %>" if (! confirm('Continue?')) return false;">Shutdown </a> | <a href="/destroy/<%= domain.uuid %>/<%= domain.node.hostname %>" onclick = "if (! confirm('Continue?')) return false;">Destroy </a></td>
+      <td><a href="/start/<%= domain.uuid %>/<%= domain.node.hostname %>" onclick ="if (! confirm('Continue?')) return false;" >Boot </a> | <a href="/shutdown/<%= domain.uuid %>/<%= domain.node.hostname %>" onclick = "if (! confirm('Continue?')) return false;">Shutdown </a> | <a href="/destroy/<%= domain.uuid %>/<%= domain.node.hostname %>" onclick = "if (! confirm('Continue?')) return false;">Destroy </a></td>
     </tr>
   <% end 
   else %>.

@@ -6,19 +6,26 @@ Note: This is my first real attempt at writing something in ruby.
 # Dependencies
 
 ####Packages
-* ruby 1.8
+* ruby 1.8 ( not tested with rub 1.9 yet)
 * sqlite3
 
 ####GEMS
+
+See Install and Run for easy way to install gem deps
+
+* bundler
 * sinatra
 * ruby-libvirt
 * dm-core (datamapper)
 * do_sqlite3
 
-# Install and Running
+# Install and Run
 
     git clone https://aussielunix@github.com/aussielunix/SinVirt.git SinVirt
-    cd SinVirt && ./main.rb
+    cd SinVirt
+    bundle install ( to install all gem deps. )
+    bundle check ( optional )
+    rackup config.ru
 
 # Current Features
 
@@ -29,7 +36,7 @@ Note: This is my first real attempt at writing something in ruby.
 # TODO
 
 * learn more ruby
-* application auth - possible ACL's
+* application auth - possibly ACLs
 * lots of error checking
 * action logging - audit trail
 * domain provisioning from kickstart
