@@ -7,6 +7,8 @@ require "bundler"
 Bundler.setup
 require 'sinatra'
 require 'dm-core'
+require 'dm-migrations'
+require 'dm-transactions'
 require 'libvirt'
 require 'sinvirt'
 
