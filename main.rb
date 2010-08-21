@@ -10,47 +10,34 @@ require 'dm-core'
 require 'dm-migrations'
 require 'dm-transactions'
 require 'libvirt'
+# Models etc
 require 'sinvirt'
 
-configure :development do
-    DataMapper::Logger.new($stdout, :debug)
-    # datamapper magick for auto migrations.
-    DataMapper.auto_upgrade!
+before do
+          @vconn = SinVirt::LibVirt.new("glenlivet")
 end
+
+
+# datamapper magick for auto migrations.
+DataMapper.auto_upgrade!
+
 
 get '/' do
+    #TODO: auth framework
     erb "Welcome"
-end
-
-#Nodes management
-get '/nodes/list' do
-    @nodes = SinVirt::DB::Node.all()
-    erb :nodes
-end
-
-post '/nodes/new' do
-    node = SinVirt::DB::Node.new(params[:node]).save
-    redirect '/nodes/list'
-end
-
-get '/nodes/delete/:id' do
-    node = SinVirt::DB::Node.get(params[:id])
-    unless node.nil?
-     node.destroy
-    end
-    redirect '/nodes/list'
 end
 
 #VMs management
 get '/domains/list' do
-    @nodes = SinVirt::DB::Node.all()
-    @domains = SinVirt::DB::Domain.all()
-    erb :domains
-end
-
-post '/domains/new' do
-    domain = SinVirt::DB::Domain.new(params[:domain]).save
-    redirect '/domains/list'
+  @cdetails = SinVirt::DB::Customer.all()
+  @domains = []
+  uuids = @vconn.list_all_domains
+  uuids.each do |uuid|
+    name = @vconn.uuid2name(uuid)
+    state = @vconn.uuid2state(uuid)
+    @domains << Domain.new(uuid, name, state)
+  end
+  erb :domains
 end
 
 get '/about' do
@@ -61,48 +48,48 @@ get '/console' do
     erb :console
 end
 
-get '/:action/:uuid/:node' do
+get '/:action/:uuid' do
   case params[:action]
     when "start"
-        vconn = SinVirt::LibVirt.new(params[:node])
-        vconn.startdomain((params[:uuid]))
-        `curl -s http://127.0.0.1:4568/update`
+        @vconn.startdomain((params[:uuid]))
     when "shutdown"
-        vconn = SinVirt::LibVirt.new(params[:node])
-        vconn.stopdomain((params[:uuid]))
-        `curl -s http://127.0.0.1:4568/update`
+        @vconn.stopdomain((params[:uuid]))
     when "destroy"
-        vconn = SinVirt::LibVirt.new(params[:node])
-        vconn.destroydomain(params[:uuid])
-        `curl -s env["HTTP_HOST"]/update`
+        @vconn.destroydomain(params[:uuid])
     else
       redirect '/', 500
     end
     redirect '/domains/list'
 end
 
-#
-# Should be called by cron to sync the db with libvirt
-get '/update' do
-    nodes = SinVirt::DB::Node.all()
-    nodes.each do |node|
-        # retrieve list of domains on node
-        @vconn = SinVirt::LibVirt.new(node.hostname)
-        uuids = @vconn.list_all_domains
-        uuids.each do |uuid|
-            if domain = SinVirt::DB::Domain.first(:uuid => uuid)
-               #update existing records
-               domain.update(:state => @vconn.uuid2state(uuid))
-            else
-                domain = SinVirt::DB::Domain.new()
-                domain.uuid = uuid
-                domain.name = @vconn.uuid2name(uuid)
-                domain.state = @vconn.uuid2state(uuid)
-                domain.node_id = node.id
-                domain.save
-            end
-        end #uuids.each
-    end #nodes.each 
+
+get '/setup' do
+    @cdetails = SinVirt::DB::Customer.all()
+    erb :setup
+end
+
+post '/setup/add' do
+   cdetails = SinVirt::DB::Customer.new(params[:cdetails]).save
+   redirect '/setup'
+end
+
+post '/provisioning/new' do
+  newdom = params[:newdom]
+  nid = newdom['id']
+  ndetails = SinVirt::DB::Customer.get(nid)
+  `virt-install --accelerate \
+               -n  #{newdom['vname']} \
+               -m #{ndetails.mac}  \
+               -r #{ndetails.rsize} \
+               --vcpus=1 \
+               --disk pool=virt,bus=virtio,size=#{ndetails.dsize} \
+               --vnc \
+               --os-type linux \
+               --os-variant=rhel5 \
+               --network=network:default \
+               --noautoconsole \
+               -l http://192.168.122.1/os/centos/5.5/os/x86_64/ \
+               -x \"ks=http://192.168.122.1/ks/#{ndetails.kickstart}\"`
     redirect '/domains/list'
-end #route
+end
 

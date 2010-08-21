@@ -1,3 +1,5 @@
+Domain = Struct.new(:uuid, :name, :state)
+	
 # Package it all up in a module to avoid namespace issues
 #
 module SinVirt
@@ -103,33 +105,25 @@ module SinVirt
     # Class holder for all DB related class's
     #
     class DB
-    DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/sinvirt.db") #TODO move to a separate config file
-    
-        # class/datamapper model for holding 'nodes' - physical machines
-        #
-        class Node
-            include DataMapper::Resource
-    
-            property  :id,                   Serial
-            property  :uuid,                 String
-            property  :hostname,             String
-            property  :state,                Boolean
-    
-            has n, :domains
-        end # Node class
+    configure :development do
+    	DataMapper::Logger.new($stdout, :debug)
+    end
 
-        # class/datamapper model for holding 'domains' - VM's    
+    #TODO move to a separate config file
+    DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/sinvirt.db") 
+
+        # class/datamapper model for holding customer's environment details
         #
-        class Domain
-            include DataMapper::Resource
-    
-            property  :id,                  Serial
-            property  :uuid,                String
-            property  :name,                String
-            property  :state,               String
-    
-            belongs_to :node
-        end # Domain class    
+		class Customer
+		    include DataMapper::Resource
+		    
+		    property	:id,                Serial, :key => true
+		    property	:name,              String
+		    property	:mac,               String
+		    property	:rsize,             Integer
+		    property	:dsize,             Integer
+		    property	:kickstart,         String
+		end # Details class
     end # DB class
 end # endmodule
 

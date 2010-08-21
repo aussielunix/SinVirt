@@ -1,0 +1,70 @@
+<h1>Setup</h1>
+<table id="customers">
+  <tr>
+  <th>ID</th>
+    <th>Name</th>
+    <th>Mac</th>
+    <th>RAM</th>
+    <th>DISK</th>
+    <th>KS Location</th>
+    <th>Action</th>
+  </tr>
+  <% if @cdetails %>
+  <% for cdetail in @cdetails %>
+    <tr>
+      <td><%= cdetail.id %></td>
+      <td><%= cdetail.name %></td>
+      <td><%= cdetail.mac %></td>
+      <td><%= cdetail.rsize %></td>
+      <td><%= cdetail.dsize %></td>
+      <td><%= cdetail.kickstart %></td>
+      <td><a href="/provisioning/delete/<%= cdetail.name %>" onclick ="if (! confirm('Continue?')) return false;">Delete </a></td>
+    </tr>
+  <% end 
+  else %>.
+<% end %>
+</tr>
+<tr>
+<form action="/setup/add" method="post" id="cdetails">
+<th>&nbsp</th>
+<th><input type="text" name="cdetails[name]" id="name" /></th>
+<th><input type="text" name="cdetails[mac]" id="mac" /></th>
+<th><input type="text" name="cdetails[rsize]" id="rsize" /></th>
+<th><input type="text" name="cdetails[dsize]" id="dsize" /></th>
+<th><input type="text" name="cdetails[kickstart]" id="kickstart" /></th>
+<th><input type="submit" value="Add" /></th>
+</form>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
