@@ -1,6 +1,9 @@
 # SinVirt
 
 A simple Sinatrarb web interface for [libvirt](http://libvirt.org/).  
+This app is aimed at webdev houses to provide devs a simple self serve development/test environment.  
+Add in a mix of your favourite configuration management (I bootstrap [Puppet](http://www.puppetlabs.com/) from my kickstarts) to have the VM's built identical to a customer's production environment.  
+
 Note: This is my first real attempt at writing something in ruby.
 
 # Dependencies
@@ -8,15 +11,16 @@ Note: This is my first real attempt at writing something in ruby.
 ####Packages
 * ruby 1.8 ( not tested with rub 1.9 yet)
 * sqlite3
+* bundler
 
 ####GEMS
-
-See Install and Run for easy way to install gem deps
 
 * bundler
 * sinatra
 * ruby-libvirt
 * dm-core (datamapper)
+* dm-migrations
+* dm-transactions
 * do_sqlite3
 
 # Install and Run
@@ -29,9 +33,10 @@ See Install and Run for easy way to install gem deps
 
 # Current Features
 
-* add/delete nodes
-* display all domains and their status across all nodes
+* display all domains and their status  
 * some basic domain controls - boot/shutdown/destroy
+* register a kickstart file to be used for provisioning new domains  
+* very basic provisioning of a domain from a pre-registered kickstart file
 
 # TODO
 
@@ -39,10 +44,12 @@ See Install and Run for easy way to install gem deps
 * application auth - possibly ACLs
 * lots of error checking
 * action logging - audit trail
-* domain provisioning from kickstart
 * ability to delete domains
 * libvirt authentication/authorization
 * possibly move to libvirt-qpid
+* refactor provisioning code to make proper use of libvirt/xml
+* UX changes - theme etc
+* add a [HTML5 VNC viewer](http://github.com/kanaka/noVNC) to gain console access to domains 
 
 Licence
 -------

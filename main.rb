@@ -64,16 +64,21 @@ end
 
 
 get '/setup' do
+    #retrieve a list of pre-registered kickstart files/customers
+    #and display them plus a form for adding/deleting 
     @cdetails = SinVirt::DB::Customer.all()
     erb :setup
 end
 
 post '/setup/add' do
+   #insert new kickstart entry into database
    cdetails = SinVirt::DB::Customer.new(params[:cdetails]).save
    redirect '/setup'
 end
 
 post '/provisioning/new' do
+# provision a new domain
+# TODO: # Refactor/tidy up/make use of libvirt+xml
   newdom = params[:newdom]
   nid = newdom['id']
   ndetails = SinVirt::DB::Customer.get(nid)
