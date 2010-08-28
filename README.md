@@ -35,20 +35,18 @@ Note: This is my first real attempt at writing something in ruby.
 
 * display all domains and their status  
 * some basic domain controls - boot/shutdown/destroy
-* register a kickstart file to be used for provisioning new domains  
-* very basic provisioning of a domain from a pre-registered kickstart file
 
 # TODO
 
 * learn more ruby
+* learn some basic javascript
+* ability to delete/archive domains
+* domain provisioning from kickstart
 * application auth - possibly ACLs
 * lots of error checking
 * action logging - audit trail
-* ability to delete domains
 * libvirt authentication/authorization
 * possibly move to libvirt-qpid
-* refactor provisioning code to make proper use of libvirt/xml
-* UX changes - theme etc
 * add a [HTML5 VNC viewer](http://github.com/kanaka/noVNC) to gain console access to domains 
 
 Licence
