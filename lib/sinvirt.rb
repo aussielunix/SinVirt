@@ -101,29 +101,5 @@ module SinVirt
             dom.create
         end    
     end #endclass
-
-    # Class holder for all DB related class's
-    #
-    class DB
-    configure :development do
-    	DataMapper::Logger.new($stdout, :debug)
-    end
-
-    #TODO move to a separate config file
-    DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/sinvirt.db") 
-
-        # class/datamapper model for holding customer's environment details
-        #
-		class Customer
-		    include DataMapper::Resource
-		    
-		    property	:id,                Serial, :key => true
-		    property	:name,              String
-		    property	:mac,               String
-		    property	:rsize,             Integer
-		    property	:dsize,             Integer
-		    property	:kickstart,         String
-		end # Details class
-    end # DB class
 end # endmodule
 

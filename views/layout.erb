@@ -5,25 +5,32 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 <title>sinvirt - sinatra libvirt</title>
-<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/layout.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/screen.css">
 </head>
 <body>
 <div class="wrapper">
+<!-- Site Title -->
+<h1 class="logo">SinVirt - Sinatra Libvirt</h1>
 <!-- Site navigation menu -->
-<ul id="tabmenu"> 
+<div class="navigation">
+<ul> 
 	<li><a href="/domains/list">VM's</a></li> 
-	<li><a href="/setup">Setup</a></li>
 	<li><a href="/console">Console</a></li> 
 	<li><a href="/about">About</a></li>
 </ul> 
-<!-- Main content -->
+</div>
+<!-- end navigation -->
+<div class="clear"></div>
+<!-- begin content div -->
+<div class="content">
   <%= yield %>
+</div> 
+<!-- end content div -->
+  
+  
+<!-- Site Footer -->
 
-		<div class="push"></div>
-	</div>
-    <div class="footer">
-    	<p>Copyright (c) GPLv3 2010 Mick Pollard</p>
-    </div>
+	<p>Copyright &copy; GPLv3 2010 Mick Pollard</p>
+</div> <!-- end wrapper div -->
 </body>
 </html>

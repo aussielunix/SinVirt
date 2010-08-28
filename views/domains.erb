@@ -1,41 +1,21 @@
 <h1>Domains</h1>
-<table id="customers">
-  <tr>
-    <th>Name</th>
-    <th>State</th>
-    <th>Actions</th>
+<div class="in">		
+<table width="850" border="0" cellspacing="0" cellpadding="10" class="table_main">
+  <tr style="background-color:#d9d8d8; font-size:14px;">
+    <td width="179"><strong>Name</strong></td>
+    <td width="184"><strong>State</strong></td>
+    <td class="foo" width="273"><strong>Actions</strong></td>
   </tr>
   <% if @domains %>
   <% for domain in @domains %>
-    <tr>
+    <tr class="gray">
       <td><%= domain.name %></td>
       <td><%= domain.state %></td>
-      <td><a href="/start/<%= domain.uuid %>" onclick ="if (! confirm('Continue?')) return false;" >Boot </a> | <a href="/shutdown/<%= domain.uuid %>" onclick = "if (! confirm('Continue?')) return false;">Shutdown </a> | <a href="/destroy/<%= domain.uuid %>" onclick = "if (! confirm('Continue?')) return false;">Destroy </a></td>
+      <td class="foo"><a href="/start/<%= domain.uuid %>" onclick ="if (! confirm('Continue?')) return false;" >Boot </a> | <a href="/shutdown/<%= domain.uuid %>" onclick = "if (! confirm('Continue?')) return false;">Shutdown </a> | <a href="/destroy/<%= domain.uuid %>" onclick = "if (! confirm('Continue?')) return false;">Power Off</a> | Delete</td>
     </tr>
   <% end 
   else %>.
 <% end %>
 </tr>
 </table>
-
-<br />
-<h3>Provision a new VM</h3>
-<br />
-
-
-<form action="/provisioning/new" method="post" id="newdom">
-<!-- select customer to provision -->
-  <select name=newdom[id]>
-    <% @cdetails.each do |cdetail| %>
-      <option value=<%= cdetail.id %>><%= cdetail.name %></option>
-    <% end %>
-  </select>
-<!-- END select customer to provision -->
-
-VM Name<input type="text" name="newdom[vname]" id="vname" />
-<th><input type="submit" value="Provision" /></th>
-</form>
-
-
-
 

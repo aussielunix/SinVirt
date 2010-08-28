@@ -29,7 +29,6 @@ end
 
 #VMs management
 get '/domains/list' do
-  @cdetails = SinVirt::DB::Customer.all()
   @domains = []
   uuids = @vconn.list_all_domains
   uuids.each do |uuid|
@@ -63,38 +62,5 @@ get '/:action/:uuid' do
 end
 
 
-get '/setup' do
-    #retrieve a list of pre-registered kickstart files/customers
-    #and display them plus a form for adding/deleting 
-    @cdetails = SinVirt::DB::Customer.all()
-    erb :setup
-end
 
-post '/setup/add' do
-   #insert new kickstart entry into database
-   cdetails = SinVirt::DB::Customer.new(params[:cdetails]).save
-   redirect '/setup'
-end
-
-post '/provisioning/new' do
-# provision a new domain
-# TODO: # Refactor/tidy up/make use of libvirt+xml
-  newdom = params[:newdom]
-  nid = newdom['id']
-  ndetails = SinVirt::DB::Customer.get(nid)
-  `virt-install --accelerate \
-               -n  #{newdom['vname']} \
-               -m #{ndetails.mac}  \
-               -r #{ndetails.rsize} \
-               --vcpus=1 \
-               --disk pool=virt,bus=virtio,size=#{ndetails.dsize} \
-               --vnc \
-               --os-type linux \
-               --os-variant=rhel5 \
-               --network=network:default \
-               --noautoconsole \
-               -l http://192.168.122.1/os/centos/5.5/os/x86_64/ \
-               -x \"ks=http://192.168.122.1/ks/#{ndetails.kickstart}\"`
-    redirect '/domains/list'
-end
 
