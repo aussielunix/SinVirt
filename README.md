@@ -49,7 +49,7 @@ Note: This is my first real attempt at writing something in ruby. Feel free to r
 * learn more ruby
 * learn some basic javascript
 * ability to delete/archive domains
-* domain provisioning from kickstart
+* domain provisioning from kickstart - See [[wiki]]
 * application auth - possibly ACLs
 * lots of error checking
 * action logging - audit trail
