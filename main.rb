@@ -6,6 +6,7 @@ require 'rubygems'
 require "bundler"
 Bundler.setup
 require 'sinatra'
+require 'yaml'
 require 'dm-core'
 require 'dm-migrations'
 require 'dm-transactions'
@@ -14,7 +15,8 @@ require 'libvirt'
 require 'sinvirt'
 
 before do
-          @vconn = SinVirt::LibVirt.new("glenlivet")
+  CONFIG = YAML.load(File.read("config/config.yml")) unless defined? CONFIG
+  @vconn = SinVirt::LibVirt.new(CONFIG['config']['node'])
 end
 
 
